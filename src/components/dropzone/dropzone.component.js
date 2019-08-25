@@ -1,10 +1,15 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import "./css/dropzone.css";
 
 const DropZone = props => {
-  const onDrop = useCallback(acceptedFiles => {
-    //console.log(acceptedFiles);
-  }, []);
+  const onDrop = useCallback(
+    acceptedFiles => {
+      console.log("On Drop");
+      props.getFiles(acceptedFiles);
+    },
+    [props]
+  );
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     onDrop
@@ -20,7 +25,7 @@ const DropZone = props => {
     <section className="container">
       <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
+        <p>Drag 'n' drop ROM files here, or click to select files</p>
       </div>
       <aside>
         {files.length > 0 ? (

@@ -1,18 +1,33 @@
-import React from 'react';
-import './App.css';
-import DropZone from './components/dropzone/dropzone.component';
+import React, { Component } from "react";
+import "./App.css";
+import DropZone from "./components/dropzone/dropzone.component";
+import XmlWriter from "./components/xmlwriter/xlmwriter.component";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <a>
-          Drop Your Roms
-        </a>
-        <DropZone />
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      files: []
+    };
+  }
+
+  render() {
+    const getFiles = _files => {
+      this.setState({ files: _files });
+      console.log("received files -> " + this.state.files);
+    };
+
+    return (
+      <div className="App">
+        <header className="App-header">
+          <DropZone getFiles={getFiles} />
+          {this.state.files && this.state.files.length > 0 ? (
+            <XmlWriter data={this.state.files} />
+          ) : null}
+        </header>
+      </div>
+    );
+  }
 }
 
 export default App;
