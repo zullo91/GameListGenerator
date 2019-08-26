@@ -14,10 +14,7 @@ class App extends Component {
   render() {
     const getFiles = _files => {
       this.setState({ files: _files });
-      console.log("received files -> " + this.state.files);
     };
-
-    console.log("files length -> " + this.state.files.length);
 
     return (
       <div className="App">

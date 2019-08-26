@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDomServer from "react-dom/server";
+import MyTextArea from "../textarea/textarea.component";
 
 const XmlWriter = props => {
   const gameList = [];
@@ -8,14 +9,15 @@ const XmlWriter = props => {
   const Game = props => React.createElement("game", props);
   const Path = props => React.createElement("path", props);
 
-  const downloadTxtFile = () => {
-    if (props.data) {
-      props.data.map(f => {
-        return gameList.push(f.path);
-      });
+  if (props.data) {
+    props.data.map(f => {
+      return gameList.push(f.path);
+    });
 
-      //Create XML Element
-      xmlElements = ReactDomServer.renderToStaticMarkup(
+    //Create XML Element
+    xmlElements = '<?xml version="1.0"?>';
+    xmlElements = xmlElements.concat(
+      ReactDomServer.renderToStaticMarkup(
         <GameList>
           {gameList.map((g, i) => {
             console.log(g);
@@ -26,24 +28,33 @@ const XmlWriter = props => {
             );
           })}
         </GameList>
-      );
+      )
+    );
 
-      console.log(xmlElements);
-
+    const downloadFile = data => {
       const element = document.createElement("a");
-      const file = new Blob([xmlElements], {
+      const file = new Blob([data], {
         type: "text/xml"
       });
       element.href = URL.createObjectURL(file);
-      element.download = "gameList.xml";
-      document.body.appendChild(element); // Required for this to work in FireFox
+      element.download = "gamelist.xml";
+      // Required for this to work in FireFox
+      document.body.appendChild(element);
       element.click();
-    }
-  };
+    };
+  }
 
+  console.log(xmlElements);
   return (
     <div>
-      <button onClick={() => downloadTxtFile()}>Download gamelist.xml</button>
+      {xmlElements ? (
+        <React.Fragment>
+          <button onClick={() => this.downloadFile(xmlElements)}>
+            Download gamelist.xml
+          </button>
+          <MyTextArea value={xmlElements} />
+        </React.Fragment>
+      ) : null}
     </div>
   );
 };
