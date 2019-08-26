@@ -9,6 +9,7 @@ const XmlWriter = props => {
   const GameList = props => React.createElement("gameList", props);
   const Game = props => React.createElement("game", props);
   const Path = props => React.createElement("path", props);
+  const Name = props => React.createElement("name", props);
 
   if (props.data) {
     props.data.map(f => {
@@ -25,6 +26,7 @@ const XmlWriter = props => {
             return (
               <Game key={i}>
                 <Path>{"./" + g}</Path>
+                <Name>{g.replace(/\.[^/.]+$/, "")}</Name>
               </Game>
             );
           })}
