@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDomServer from "react-dom/server";
 import MyTextArea from "../textarea/textarea.component";
+import beautify from "xml-beautifier";
 
 const XmlWriter = props => {
   const gameList = [];
@@ -30,26 +31,26 @@ const XmlWriter = props => {
         </GameList>
       )
     );
-
-    const downloadFile = data => {
-      const element = document.createElement("a");
-      const file = new Blob([data], {
-        type: "text/xml"
-      });
-      element.href = URL.createObjectURL(file);
-      element.download = "gamelist.xml";
-      // Required for this to work in FireFox
-      document.body.appendChild(element);
-      element.click();
-    };
+    xmlElements = beautify(xmlElements);
   }
 
-  console.log(xmlElements);
+  const downloadFile = data => {
+    const element = document.createElement("a");
+    const file = new Blob([data], {
+      type: "text/xml"
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = "gamelist.xml";
+    // Required for this to work in FireFox
+    document.body.appendChild(element);
+    element.click();
+  };
+
   return (
     <div>
       {xmlElements ? (
         <React.Fragment>
-          <button onClick={() => this.downloadFile(xmlElements)}>
+          <button onClick={() => downloadFile(xmlElements)}>
             Download gamelist.xml
           </button>
           <MyTextArea value={xmlElements} />
