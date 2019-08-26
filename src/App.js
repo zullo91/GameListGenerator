@@ -17,6 +17,8 @@ class App extends Component {
       console.log("received files -> " + this.state.files);
     };
 
+    console.log("files length -> " + this.state.files.length);
+
     return (
       <div className="App">
         <header className="App-header">
