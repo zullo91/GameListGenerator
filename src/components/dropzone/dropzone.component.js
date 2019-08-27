@@ -5,7 +5,6 @@ import "./css/dropzone.css";
 const DropZone = props => {
   const onDrop = useCallback(
     acceptedFiles => {
-      console.log("On Drop");
       props.getFiles(acceptedFiles);
     },
     [props]

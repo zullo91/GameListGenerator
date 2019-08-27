@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import DropZone from "./components/dropzone/dropzone.component";
 import XmlWriter from "./components/xmlwriter/xlmwriter.component";
+import DropZoneAndRead from "./components/dropzone/dropandread/dropzoneandread.component";
 
 class App extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <DropZone getFiles={getFiles} />
+          <DropZoneAndRead />
           {this.state.files && this.state.files.length > 0 ? (
             <XmlWriter data={this.state.files} />
           ) : null}
