@@ -14,7 +14,8 @@ class App extends Component {
     this.state = {
       files: [],
       gameElements: "",
-      documentElements: "",
+      newDocumentElements: "",
+      mergedDocumentElements: "",
       showDownload: false,
       showMerge: false,
       stopWriter: false
@@ -30,14 +31,20 @@ class App extends Component {
       this.setState({ files: _files, showDownload: true, showMerge: true });
     };
 
-    const setDocumentElements = _elements => {
-      this.setState({ documentElements: _elements }, () => {
+    const setNewDocumentElements = _elements => {
+      this.setState({ newDocumentElements: _elements }, () => {
         /*console.log("state elements: ", this.state.elements);*/
       });
     };
 
     const setGameElements = _elements => {
       this.setState({ gameElements: _elements }, () => {
+        /*console.log("state elements: ", this.state.elements);*/
+      });
+    };
+
+    const setMergedDocumentElements = _elements => {
+      this.setState({ mergedDocumentElements: _elements }, () => {
         /*console.log("state elements: ", this.state.elements);*/
       });
     };
@@ -65,41 +72,44 @@ class App extends Component {
         <AppMainWrapper className="App-main">
           <div className="section">
             <p>Create gamelist.xml</p>
-            <DropZone getFiles={getFiles} />
+            <DropZone onDropCallback={getFiles} />
           </div>
           {this.state.files &&
           this.state.files.length > 0 &&
           !this.state.stopWriter ? (
             <XmlWriter
               data={this.state.files}
-              setDocumentElements={setDocumentElements}
+              setDocumentElements={setNewDocumentElements}
               setGameElements={setGameElements}
               lockWriter={lockWriter}
             />
           ) : null}
-          {this.state.showDownload && this.state.documentElements ? (
+          {this.state.showDownload && this.state.newDocumentElements ? (
             <React.Fragment>
               <Download
                 fileType="text/xml"
                 fileDownloadName="gamelist.xml"
-                elements={this.state.documentElements}
+                elements={this.state.newDocumentElements}
                 text="Download NEW gamelist.xml file"
               />
-              <MyTextArea value={this.state.documentElements} />
+              <MyTextArea value={this.state.newDocumentElements} />
             </React.Fragment>
           ) : null}
           {this.state.showMerge && this.state.gameElements ? (
             <Download
               fileType="text/xml"
               fileDownloadName="gamelist.xml"
-              elements={this.state.gameElements}
+              elements={this.state.mergedDocumentElements}
               text="Download MERGED gamelist.xml file"
             />
           ) : null}
           {this.state.gameElements ? (
             <div className="section">
               <p>Merge into existent gamelist.xml</p>
-              <DropZoneAndMerge elements={this.state.gameElements} />
+              <DropZoneAndMerge
+                elements={this.state.gameElements}
+                onDropCallback={setMergedDocumentElements}
+              />
             </div>
           ) : null}
         </AppMainWrapper>

@@ -3,6 +3,9 @@ import { useDropzone } from "react-dropzone";
 import "../css/dropzone.css";
 
 const DropZoneAndMerge = props => {
+  var onDropCallback = props.onDropCallback;
+  var elements = props.elements;
+
   const onDrop = useCallback(
     acceptedFiles => {
       const reader = new FileReader();
@@ -14,15 +17,16 @@ const DropZoneAndMerge = props => {
         const content = reader.result;
         let a = content;
         let markToFind = "<gameList>";
-        let b = props.elements;
+        let b = elements;
         let position = content.indexOf(markToFind) + markToFind.length;
         let output = [a.slice(0, position), b, a.slice(position)].join("\n");
         console.log(output);
+        onDropCallback(output);
       };
 
       acceptedFiles.forEach(file => reader.readAsBinaryString(file));
     },
-    [props.elements]
+    [onDropCallback, elements]
   );
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({

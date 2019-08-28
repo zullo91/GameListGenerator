@@ -18,28 +18,29 @@ const XmlWriter = props => {
     const Name = props => React.createElement("name", props);
 
     console.log("[XMLWriter]");
+
     if (data) {
       data.map(f => {
         return gameList.push(f.path);
       });
 
+      var gameListMap = gameList.map((g, i) => {
+        return (
+          <Game key={i}>
+            <Path>{"./" + g}</Path>
+            <Name>{g.replace(/\.[^/.]+$/, "")}</Name>
+          </Game>
+        );
+      });
+
       gameElements = ReactDomServer.renderToStaticMarkup(
-        <React.Fragment>
-          {gameList.map((g, i) => {
-            return (
-              <Game key={i}>
-                <Path>{"./" + g}</Path>
-                <Name>{g.replace(/\.[^/.]+$/, "")}</Name>
-              </Game>
-            );
-          })}
-        </React.Fragment>
+        <React.Fragment>{gameListMap}</React.Fragment>
       );
 
       //Create XML Element
       documentElements = '<?xml version="1.0"?>';
       documentElements = documentElements.concat(
-        ReactDomServer.renderToStaticMarkup(<GameList>{gameElements}</GameList>)
+        ReactDomServer.renderToStaticMarkup(<GameList>{gameListMap}</GameList>)
       );
       documentElements = beautify(documentElements);
 

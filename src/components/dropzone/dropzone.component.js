@@ -3,13 +3,13 @@ import { useDropzone } from "react-dropzone";
 import "./css/dropzone.css";
 
 const DropZone = props => {
-  var getFiles = props.getFiles;
+  var onDropCallback = props.onDropCallback;
 
   const onDrop = useCallback(
     acceptedFiles => {
-      getFiles(acceptedFiles);
+      onDropCallback(acceptedFiles);
     },
-    [getFiles]
+    [onDropCallback]
   );
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
