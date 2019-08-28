@@ -21,7 +21,7 @@ const DropZone = props => {
   ));
 
   return (
-    <section className="container">
+    <section>
       <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
         <p>Drag 'n' drop ROM files here, or click to select files</p>

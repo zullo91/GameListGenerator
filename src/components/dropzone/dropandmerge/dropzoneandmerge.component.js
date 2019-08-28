@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import "../css/dropzone.css";
 
-const DropZoneAndRead = props => {
+const DropZoneAndMerge = props => {
   let fileReader;
 
   const handleFileRead = e => {
@@ -36,7 +36,7 @@ const DropZoneAndRead = props => {
   ));
 
   return (
-    <section className="container">
+    <section>
       <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
         <p>Drag File to Merge</p>
@@ -53,4 +53,4 @@ const DropZoneAndRead = props => {
   );
 };
 
-export default DropZoneAndRead;
+export default DropZoneAndMerge;
