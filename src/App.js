@@ -40,8 +40,12 @@ class App extends Component {
         </div>
         <p>And the main section.</p>
         <AppMainWrapper className="App-main">
-          <DropZone getFiles={getFiles} />
-          <DropZoneAndMerge />
+          <div className="section">
+            <DropZone getFiles={getFiles} />
+          </div>
+          <div className="section">
+            <DropZoneAndMerge />
+          </div>
         </AppMainWrapper>
         <div className="App-footer">
           {this.state.files && this.state.files.length > 0 ? (
