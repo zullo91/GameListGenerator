@@ -5,12 +5,19 @@ import XmlWriter from "./components/xmlwriter/xlmwriter.component";
 import DropZoneAndMerge from "./components/dropzone/dropandmerge/dropzoneandmerge.component";
 import { SvgWrapper, AppMainWrapper } from "./customStyle/customApp.style";
 import { onInitAnimation } from "./customStyle/svgAnimation";
+import Download from "./components/actions/download.component";
+import MyTextArea from "./components/textarea/textarea.component";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      files: []
+      files: [],
+      gameElements: "",
+      documentElements: "",
+      showDownload: false,
+      showMerge: false,
+      stopWriter: false
     };
   }
 
@@ -20,7 +27,23 @@ class App extends Component {
 
   render() {
     const getFiles = _files => {
-      this.setState({ files: _files });
+      this.setState({ files: _files, showDownload: true, showMerge: true });
+    };
+
+    const setDocumentElements = _elements => {
+      this.setState({ documentElements: _elements }, () => {
+        /*console.log("state elements: ", this.state.elements);*/
+      });
+    };
+
+    const setGameElements = _elements => {
+      this.setState({ gameElements: _elements }, () => {
+        /*console.log("state elements: ", this.state.elements);*/
+      });
+    };
+
+    const lockWriter = () => {
+      this.setState({ stopWriter: true });
     };
 
     return (
@@ -41,28 +64,48 @@ class App extends Component {
         <p>And the main section.</p>
         <AppMainWrapper className="App-main">
           <div className="section">
+            <p>Create gamelist.xml</p>
             <DropZone getFiles={getFiles} />
           </div>
-          <div className="section">
-            <DropZoneAndMerge />
-          </div>
+          {this.state.files &&
+          this.state.files.length > 0 &&
+          !this.state.stopWriter ? (
+            <XmlWriter
+              data={this.state.files}
+              setDocumentElements={setDocumentElements}
+              setGameElements={setGameElements}
+              lockWriter={lockWriter}
+            />
+          ) : null}
+          {this.state.showDownload && this.state.documentElements ? (
+            <React.Fragment>
+              <Download
+                fileType="text/xml"
+                fileDownloadName="gamelist.xml"
+                elements={this.state.documentElements}
+                text="Download NEW gamelist.xml file"
+              />
+              <MyTextArea value={this.state.documentElements} />
+            </React.Fragment>
+          ) : null}
+          {this.state.showMerge && this.state.gameElements ? (
+            <Download
+              fileType="text/xml"
+              fileDownloadName="gamelist.xml"
+              elements={this.state.gameElements}
+              text="Download MERGED gamelist.xml file"
+            />
+          ) : null}
+          {this.state.gameElements ? (
+            <div className="section">
+              <p>Merge into existent gamelist.xml</p>
+              <DropZoneAndMerge elements={this.state.gameElements} />
+            </div>
+          ) : null}
         </AppMainWrapper>
         <div className="App-footer">
-          {this.state.files && this.state.files.length > 0 ? (
-            <XmlWriter data={this.state.files} />
-          ) : null}
           <p>Powered by @zullo</p>
         </div>
-
-        {/* <div className="container">
-          <div className="section">
-            <DropZone getFiles={getFiles} />
-          </div>
-          <div className="section">
-            <DropZoneAndMerge />
-          </div>
-        </div>
-        {/* End container */}
       </div>
     );
   }

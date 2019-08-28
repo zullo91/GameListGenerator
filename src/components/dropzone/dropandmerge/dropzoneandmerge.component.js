@@ -3,30 +3,31 @@ import { useDropzone } from "react-dropzone";
 import "../css/dropzone.css";
 
 const DropZoneAndMerge = props => {
-  let fileReader;
+  const onDrop = useCallback(
+    acceptedFiles => {
+      const reader = new FileReader();
 
-  const handleFileRead = e => {
-    const content = fileReader.result;
-    let a = content;
-    let markToFind = "<gameList>";
-    let b = "<MyWord> My Word </MyWord>";
-    let position = content.indexOf(markToFind) + markToFind.length;
-    let output = [a.slice(0, position), b, a.slice(position)].join("\n");
-    console.log(output);
-  };
+      reader.onabort = () => console.log("file reading was aborted");
+      reader.onerror = () => console.log("file reading has failed");
+      reader.onload = () => {
+        // Do whatever you want with the file contents
+        const content = reader.result;
+        let a = content;
+        let markToFind = "<gameList>";
+        let b = props.elements;
+        let position = content.indexOf(markToFind) + markToFind.length;
+        let output = [a.slice(0, position), b, a.slice(position)].join("\n");
+        console.log(output);
+      };
 
-  const handleFileChosen = file => {
-    fileReader = new FileReader();
-    fileReader.onloadend = handleFileRead;
-    fileReader.readAsText(file);
-  };
-
-  const onDrop = useCallback(acceptedFiles => {
-    handleFileChosen(acceptedFiles[0]);
-  }, []);
+      acceptedFiles.forEach(file => reader.readAsBinaryString(file));
+    },
+    [props.elements]
+  );
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-    onDrop
+    onDrop,
+    accept: "text/xml"
   });
 
   const files = acceptedFiles.map(file => (

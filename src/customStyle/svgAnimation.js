@@ -1,5 +1,3 @@
-import $ from "jquery";
-
 export function onInitAnimation() {
   // Variables
 
@@ -24,16 +22,18 @@ export function onInitAnimation() {
 
 // Handle the functionality
 function scrollEvent(scrollPos) {
-  var $curve = document.getElementById("curve");
+  var curve = document.getElementById("curve");
   var defaultCurveValue = 350;
   var curveRate = 3;
   var curveValue;
 
   if (scrollPos >= 0) {
     curveValue = defaultCurveValue - parseFloat(scrollPos / curveRate);
-    $curve.setAttribute(
-      "d",
-      "M 800 300 Q 400 " + curveValue + " 0 300 L 0 0 L 800 0 L 800 300 Z"
-    );
+
+    if (curve)
+      curve.setAttribute(
+        "d",
+        "M 800 300 Q 400 " + curveValue + " 0 300 L 0 0 L 800 0 L 800 300 Z"
+      );
   }
 }
